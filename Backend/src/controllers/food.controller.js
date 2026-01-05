@@ -1,9 +1,16 @@
 const foodModel = require('../models/food.model');
-const foodController = require('../controllers/food.controller');
-const authMiddleware = require('../middlewares/auth.middleware');
-const router = require('express').Router();
 
-// POST /api/food [protected]*
-router.post('/',authMiddleware.authFoodPartnerMiddleware, foodController.createFood); 
 
-module.exports = router;
+
+async function createFood(req, res) { 
+    console.log("req.foodpartner:", req.foodpartner);
+    console.log(req.body);
+    console.log("req.file:", req.file);
+
+    res.send("Create food endpoint reached");
+}
+
+
+module.exports ={
+    createFood
+}
