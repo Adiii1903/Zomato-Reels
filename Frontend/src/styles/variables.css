@@ -1,0 +1,29 @@
+/* Centralized theme variables — adapted to system light/dark */
+:root {
+  --font-sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  --bg: #f7f7fa;
+  --card: #ffffff;
+  --text: #0f1720;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --accent-contrast: #ffffff;
+  --border: #e6e9ef;
+  --input-bg: #ffffff;
+  --shadow: 0 6px 18px rgba(16,24,40,0.06);
+  --radius: 12px;
+  --gap: 12px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #071127;
+    --card: #0f1724;
+    --text: #e6eef8;
+    --muted: #9aa6b2;
+    --accent: #60a5fa;
+    --accent-contrast: #06202a;
+    --border: #16202b;
+    --input-bg: #08111a;
+    --shadow: 0 10px 30px rgba(2,6,23,0.6);
+  }
+}

@@ -92,9 +92,9 @@ async function loginUser(req, res){
 
 async function registerFoodPartner(req,res){
     try {
-        const { name, email, password} = req.body; 
+        const { name, email, password, address, ownerName, phoneNumber } = req.body; 
 
-        if (!name || !email || !password) {
+        if (!name || !email || !password || !address || !ownerName || !phoneNumber  ) {
             return res.status(400).json({
                 message: "name, email and password are required"
             });
@@ -116,6 +116,9 @@ async function registerFoodPartner(req,res){
             name,
             email,
             password: hashedPassword
+            ,address,
+            ownerName,
+            phoneNumber
         })
 
         const token = jwt.sign({
@@ -129,7 +132,10 @@ async function registerFoodPartner(req,res){
             foodPartner:{
                 _id: foodPartner._id,
                 email: foodPartner.email,
-                name: foodPartner.name
+                name: foodPartner.name,
+                ownerName: foodPartner.ownerName,
+                address: foodPartner.address,
+                phoneNumber: foodPartner.phoneNumber
             }
         })
     } catch (err) {
