@@ -6,6 +6,7 @@ import FoodPartnerRegister from "../pages/auth/FoodPartnerRegister.jsx";
 import FoodPartnerLogin from "../pages/auth/FoodPartnerLogin.jsx";
 import "../styles/auth-shared.css";
 import Home from "../pages/general/Home.jsx";
+import createFood from "../pages/food-partner/createFood.jsx";
 
 const AuthChoice = () => {
     return (
@@ -24,8 +25,9 @@ const AppRoutes = () => {
 
                 <Route path="/food-partner/register" element={<FoodPartnerRegister />} />
                 <Route path="/food-partner/login" element={<FoodPartnerLogin />} />
-                
+
                 <Route path="/Home" element={<Home />} />
+                <Route path="/create-food" element={<createFoodPartner />} /> 
             </Routes>
         </Router>
     );
