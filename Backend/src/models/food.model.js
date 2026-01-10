@@ -1,25 +1,33 @@
 const mongoose = require('mongoose');
 
 const foodSchema = new mongoose.Schema({
-    foodItename: {
+    name: {
         type: String,
-        required: true
+        required: true,
     },
-    video :{
+    video: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
     },
-    foodPartner :{
+    foodPartner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'FoodPartner'
+        ref: "foodpartner"
+    },
+    likeCount: {
+        type: Number,
+        default: 0
+    },
+    savesCount: {
+        type: Number,
+        default: 0
     }
+})
 
-    })
+
+const foodModel = mongoose.model("food", foodSchema);
 
 
-    const foodModel = mongoose.model('Food', foodSchema);
-
-    module.exports = foodModel;
+module.exports = foodModel;

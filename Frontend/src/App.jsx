@@ -1,11 +1,11 @@
 import React from 'react'
-import AppRoutes from './routes/appRoutes.jsx'
 
 import './App.css'
-import { Route } from 'react-router-dom'
+import './styles/theme.css'
+import AppRoutes from './routes/appRoutes'
 
 function App() {
-  
+
 
   return (
     <>

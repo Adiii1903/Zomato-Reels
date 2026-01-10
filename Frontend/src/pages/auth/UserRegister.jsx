@@ -24,12 +24,11 @@ const UserRegister = () => {
         },
         {
             withCredentials: true
-        }
-        )
+        })
 
         console.log(response.data);
 
-      navigate("/Home", { replace: true }); // Redirect to home after registration
+        navigate("/")
 
     };
 
