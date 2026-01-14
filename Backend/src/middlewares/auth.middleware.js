@@ -1,31 +1,41 @@
-const foodPartnerModel = require('../models/foodpartner.model');
-const userModel = require('../models/user.model');
-const JWT = require('jsonwebtoken');
+const foodPartnerModel = require("../models/foodpartner.model")
+const userModel = require("../models/user.model")
+const jwt = require("jsonwebtoken");
+
 
 async function authFoodPartnerMiddleware(req, res, next) {
-    
-        const token = req.cookies?.token;
 
-        if (!token) {
-            return res.status(401).json({
-                message: "Unauthorized access — please login"
-            });
-        }
-        try {
-        const decoded = JWT.verify(token, process.env.JWT_SECRET); // or process.env.JWT_SECRET
-        const foodpartner = await foodPartnerModel.findById(decoded.id);
+    const token = req.cookies.token;
 
-        if (!foodpartner) {
-            return res.status(401).json({ message: "Invalid token: user not found" });
-        }
-
-        req.foodpartner = foodpartner;
-        next();
-    } catch (error) {
+    if (!token) {
         return res.status(401).json({
-            message: "Unauthorized access — invalid token"
-        });
+            message: "Please login first"
+        })
     }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+
+        const foodPartner = await foodPartnerModel.findById(decoded.id);
+
+        if (!foodPartner) {
+            return res.status(401).json({
+                message: "Food partner not found"
+            })
+        }
+
+        req.foodPartner = foodPartner
+
+        next()
+
+    } catch (err) {
+
+        return res.status(401).json({
+            message: "Invalid token"
+        })
+
+    }
+
 }
 
 async function authUserMiddleware(req, res, next) {
@@ -34,20 +44,31 @@ async function authUserMiddleware(req, res, next) {
 
     if (!token) {
         return res.status(401).json({
-            message: "Unauthorized access — please login"
-        });
-    }       
+            message: "Please login first"
+        })
+    }
 
     try {
-        const decoded = JWT.verify(token, process.env.JWT_SECRET);  
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
         const user = await userModel.findById(decoded.id);
-        req.user = user;
-        next();
-    } catch (error) {
+
+        if (!user) {
+            return res.status(401).json({
+                message: "User not found"
+            })
+        }
+
+        req.user = user
+
+        next()
+
+    } catch (err) {
+
         return res.status(401).json({
-            message: "Unauthorized access — invalid token"
-        });
+            message: "Invalid token"
+        })
+
     }
 
 }
@@ -55,4 +76,4 @@ async function authUserMiddleware(req, res, next) {
 module.exports = {
     authFoodPartnerMiddleware,
     authUserMiddleware
-};     
+}
