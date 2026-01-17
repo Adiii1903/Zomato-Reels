@@ -122,3 +122,87 @@ button.auth-submit:focus-visible { outline: 2px solid var(--color-accent-hover);
 
 /* Smooth transitions for theme change */
 body, .auth-card, .field-group input { transition: background 200ms ease, color 200ms ease, border-color 200ms ease; }
+
+
+
+
+
+
+/* Header */
+.auth-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.auth-title {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.auth-subtitle {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+}
+
+/* Actions */
+.choose-register-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Buttons */
+.auth-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 46px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+/* Primary button */
+.auth-btn.primary {
+   background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.auth-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+}
+
+/* Secondary button */
+.auth-btn.secondary {
+  background: var(--color-surface-alt);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.auth-btn.secondary:hover {
+  background: var(--color-surface);
+  transform: translateY(-2px);
+}
+
+/* Footer text */
+.auth-alt-action {
+  margin-top: 18px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.auth-alt-action a {
+  margin-left: 4px;
+  color: var(--color-primary);
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.auth-alt-action a:hover {
+  text-decoration: underline;
+}
