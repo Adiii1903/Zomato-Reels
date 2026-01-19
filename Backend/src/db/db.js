@@ -17,22 +17,28 @@
 
 const mongoose = require("mongoose");
 
-let isConnected = false;
+let cached = global.mongoose;
 
-const connectDB = async () => {
-  if (isConnected) return;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
 
-  const mongoUri = process.env.MONGODB_URI;
-
-  if (!mongoUri) {
-    throw new Error("MONGO_URI is missing in .env file");
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
   }
 
-  await mongoose.connect(mongoUri);
-  isConnected = true;
+  if (!cached.promise) {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      throw new Error("MONGODB_URI not defined");
+    }
 
-  console.log(" MongoDB connected");
-};
+    cached.promise = mongoose.connect(uri).then((mongoose) => mongoose);
+  }
+
+  cached.conn = await cached.promise;
+  return cached.conn;
+}
 
 module.exports = connectDB;
-

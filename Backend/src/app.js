@@ -2,19 +2,16 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 
-const connectDB = require("./db/db");
 const authRoutes = require("./routes/auth.routes");
 const foodRoutes = require("./routes/food.routes");
 const foodPartnerRoutes = require("./routes/food-partner.routes");
-
-connectDB();
 
 const app = express();
 
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://your-frontend.vercel.app"
+    "https://zomato-reels.vercel.app"
   ],
   credentials: true
 }));
