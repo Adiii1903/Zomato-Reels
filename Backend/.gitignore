@@ -1,1 +1,12 @@
-.vercel
+# dependencies
+node_modules/
+
+# env files
+.env
+Backend/.env
+
+# vercel
+.vercel/
+
+# backend
+Backend/api/
