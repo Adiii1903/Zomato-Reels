@@ -1,2 +1,15 @@
+# dependencies
+node_modules/
+
+# env files
 .env
-node_modules
+
+# vercel
+.vercel/
+
+# frontend
+Frontend/node_modules/
+
+# backend
+Backend/node_modules/
+Backend/.env
