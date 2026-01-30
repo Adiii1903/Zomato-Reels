@@ -1,10 +1,17 @@
-const express = require("express");
+import { connectDB } from "../db/db.js";
 
-const app = express();
-app.use(express.json());
+export default async function handler(req, res) {
+  try {
+    await connectDB();
 
-app.get("/", (req, res) => {
-  res.send("Backend running on Vercel 🚀");
-});
-
-module.exports = app;
+    res.status(200).json({
+      success: true,
+      message: "FoodView backend is running 🚀"
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message
+    });
+  }
+}
