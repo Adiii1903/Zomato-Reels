@@ -7,16 +7,15 @@ const foodPartnerRoutes = require("./routes/food-partner.routes");
 
 const app = express();
 
-/* =========================
-   HARD CORS FIX (FINAL)
-   ========================= */
+const FRONTEND_URL = "https://zomato-reels-frontend-yfss.onrender.com";
 
-const ALLOWED_ORIGIN = "https://zomato-reels-frontend-yfss.onrender.com";
-
+/* ======================
+   HARD CORS HANDLER
+   ====================== */
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
-  if (origin === ALLOWED_ORIGIN) {
+  if (origin === FRONTEND_URL) {
     res.setHeader("Access-Control-Allow-Origin", origin);
   }
 
@@ -30,7 +29,7 @@ app.use((req, res, next) => {
     "Content-Type, Authorization"
   );
 
-  // 🔴 THIS IS THE MOST IMPORTANT LINE
+  // 🔴 THIS LINE FIXES EVERYTHING
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
@@ -38,24 +37,18 @@ app.use((req, res, next) => {
   next();
 });
 
-/* =========================
+/* ======================
    MIDDLEWARES
-   ========================= */
-
+   ====================== */
 app.use(cookieParser());
 app.use(express.json());
 
-/* =========================
-   TEST ROUTE
-   ========================= */
-
+/* ======================
+   ROUTES
+   ====================== */
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
-
-/* =========================
-   ROUTES
-   ========================= */
 
 app.use("/api/auth", authRoutes);
 app.use("/api/food", foodRoutes);
