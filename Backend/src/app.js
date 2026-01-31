@@ -39,19 +39,18 @@ const foodPartnerRoutes = require("./routes/food-partner.routes");
 
 const app = express();
 
-// app.use(cors({
-//   origin: true,
-//   credentials: true
-// }));
+/* =======================
+   CORS CONFIG (FINAL)
+   ======================= */
 
 const allowedOrigins = [
-  "https://zomato-reels-frontend-yfss.onrender.com"
+  "https://zomato-reels-frontend-yfss.onrender.com",
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps, curl, Postman)
+      // allow requests with no origin (Postman, curl, server-to-server)
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
@@ -66,16 +65,24 @@ app.use(
   })
 );
 
-// IMPORTANT: handle preflight requests
-app.options("*", cors());
-
+/* =======================
+   MIDDLEWARES
+   ======================= */
 
 app.use(cookieParser());
 app.use(express.json());
 
+/* =======================
+   TEST ROUTE
+   ======================= */
+
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
+
+/* =======================
+   ROUTES
+   ======================= */
 
 app.use("/api/auth", authRoutes);
 app.use("/api/food", foodRoutes);
