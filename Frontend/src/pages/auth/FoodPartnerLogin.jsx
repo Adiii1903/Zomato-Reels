@@ -3,6 +3,8 @@ import '../../styles/auth-shared.css';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const FoodPartnerLogin = () => {
 
   const navigate = useNavigate();
