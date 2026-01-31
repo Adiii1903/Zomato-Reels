@@ -1,37 +1,5 @@
-// const express = require("express");
-// const cookieParser = require("cookie-parser");
-// const cors = require("cors");
-
-// const authRoutes = require("./routes/auth.routes");
-// const foodRoutes = require("./routes/food.routes");
-// const foodPartnerRoutes = require("./routes/food-partner.routes");
-
-// const app = express();
-
-// app.use(cors({
-//   origin: [
-//     "http://localhost:5173",
-//     "https://zomato-reels.vercel.app"
-//   ],
-//   credentials: true
-// }));
-
-// app.use(cookieParser());
-// app.use(express.json());
-
-// app.get("/", (req, res) => {
-//   res.send("Backend is running 🚀");
-// });
-
-// app.use("/api/auth", authRoutes);
-// app.use("/api/food", foodRoutes);
-// app.use("/api/food-partner", foodPartnerRoutes);
-
-// module.exports = app;
-
 const express = require("express");
 const cookieParser = require("cookie-parser");
-const cors = require("cors");
 
 const authRoutes = require("./routes/auth.routes");
 const foodRoutes = require("./routes/food.routes");
@@ -39,50 +7,55 @@ const foodPartnerRoutes = require("./routes/food-partner.routes");
 
 const app = express();
 
-/* =======================
-   CORS CONFIG (FINAL)
-   ======================= */
+/* =========================
+   HARD CORS FIX (FINAL)
+   ========================= */
 
-const allowedOrigins = [
-  "https://zomato-reels-frontend-yfss.onrender.com",
-];
+const ALLOWED_ORIGIN = "https://zomato-reels-frontend-yfss.onrender.com";
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (Postman, curl, server-to-server)
-      if (!origin) return callback(null, true);
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
 
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+  if (origin === ALLOWED_ORIGIN) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
 
-/* =======================
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,DELETE,OPTIONS"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization"
+  );
+
+  // 🔴 THIS IS THE MOST IMPORTANT LINE
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
+/* =========================
    MIDDLEWARES
-   ======================= */
+   ========================= */
 
 app.use(cookieParser());
 app.use(express.json());
 
-/* =======================
+/* =========================
    TEST ROUTE
-   ======================= */
+   ========================= */
 
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
 
-/* =======================
+/* =========================
    ROUTES
-   ======================= */
+   ========================= */
 
 app.use("/api/auth", authRoutes);
 app.use("/api/food", foodRoutes);
