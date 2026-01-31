@@ -10,7 +10,7 @@ const app = express();
 const FRONTEND_URL = "https://zomato-reels-frontend-yfss.onrender.com";
 
 /* ======================
-   HARD CORS HANDLER
+   FINAL CORS FIX
    ====================== */
 app.use((req, res, next) => {
   const origin = req.headers.origin;
@@ -22,14 +22,16 @@ app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Credentials", "true");
   res.setHeader(
     "Access-Control-Allow-Methods",
-    "GET,POST,PUT,DELETE,OPTIONS"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization"
+    "GET, POST, PUT, DELETE, OPTIONS"
   );
 
-  // 🔴 THIS LINE FIXES EVERYTHING
+  // 🔴 THIS LINE WAS MISSING BEFORE
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+
+  // Handle preflight
   if (req.method === "OPTIONS") {
     return res.sendStatus(200);
   }
