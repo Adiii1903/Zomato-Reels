@@ -1,38 +1,40 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import '../../styles/auth-shared.css';
+import AuthLayout from '../../components/auth/AuthLayout';
+import AuthCard from '../../components/auth/AuthCard';
+import AuthButton from '../../components/auth/AuthButton';
 
 const ChooseRegister = () => {
   return (
-    <div className="auth-page-wrapper">
-      <div className="auth-card choose-register-card" role="region" aria-labelledby="choose-register-title">
-        
-        <header className="auth-header">
-          <h1 id="choose-register-title" className="auth-title">
+    <AuthLayout>
+      <AuthCard>
+        <header className="space-y-2 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.4em] text-indigo-500/80">Get started</p>
+          <h1 id="choose-register-title" className="text-2xl font-semibold text-slate-900 dark:text-white">
             Create your account
           </h1>
-          <p className="auth-subtitle">
-            Choose how you want to join our platform
+          <p className="text-sm text-slate-500 dark:text-slate-300">
+            Choose how you want to join the Zomato Reels platform.
           </p>
         </header>
 
-        <div className="choose-register-actions">
-          <Link to="/user/register" className="auth-btn primary">
+        <div className="mt-8 space-y-4">
+          <AuthButton as={Link} to="/user/register">
             Register as User
-          </Link>
-
-          <Link to="/food-partner/register" className="auth-btn secondary">
+          </AuthButton>
+          <AuthButton as={Link} to="/food-partner/register" variant="secondary">
             Register as Food Partner
+          </AuthButton>
+        </div>
+
+        <p className="mt-8 text-center text-sm text-slate-500">
+          Already have an account?{' '}
+          <Link className="font-semibold text-indigo-500 hover:text-indigo-400" to="/user/login">
+            Sign in
           </Link>
-        </div>
-
-        <div className="auth-alt-action">
-          Already have an account?
-          <Link to="/user/login"> Sign in</Link>
-        </div>
-
-      </div>
-    </div>
+        </p>
+      </AuthCard>
+    </AuthLayout>
   );
 };
 
