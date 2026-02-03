@@ -37,6 +37,27 @@
   background: #000;
 }
 
+.reel-placeholder {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 20%, rgba(51, 65, 85, 0.5), rgba(15, 23, 42, 0.9));
+}
+
+.reel-skeleton {
+  background: linear-gradient(110deg, #0f172a 25%, #1f2937 40%, #0f172a 55%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+.reel-skeleton-list {
+  width: 100%;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
 /* ===== VIDEO ===== */
 .reel-video {
   position: absolute;
@@ -53,6 +74,33 @@
   position: absolute;
   inset: 0;
   pointer-events: none;
+}
+
+.reel-status {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(15, 23, 42, 0.85);
+  color: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  font-size: 13px;
+  pointer-events: auto;
+}
+
+.reel-retry {
+  border: none;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 12px;
+  cursor: pointer;
 }
 
 /* Gradient for readability */
@@ -150,4 +198,15 @@
   display: grid;
   place-items: center;
   color: #fff;
+}
+
+.reel-sentinel {
+  height: 1px;
+}
+
+.reel-loading {
+  text-align: center;
+  color: #94a3b8;
+  padding: 12px 0 24px;
+  font-size: 13px;
 }
