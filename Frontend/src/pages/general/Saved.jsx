@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React, { Suspense, useCallback, useEffect, useState } from 'react'
 import '../../styles/reels.css'
 import axios from 'axios'
-import ReelFeed from '../../components/ReelFeed'
+
+const ReelFeed = React.lazy(() => import('../../components/ReelFeed'))
 
 const Saved = () => {
     const [ videos, setVideos ] = useState([])
+    const [ isLoading, setIsLoading ] = useState(true)
 
     useEffect(() => {
         axios.get(`${import.meta.env.VITE_API_URL}/api/food/save`, { withCredentials: true })
@@ -17,26 +19,33 @@ const Saved = () => {
                     savesCount: item.food.savesCount,
                     commentsCount: item.food.commentsCount,
                     foodPartner: item.food.foodPartner,
+                    streamUrl: item.food.streamUrl
                 }))
                 setVideos(savedFoods)
             })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }, [])
 
-    const removeSaved = async (item) => {
+    const removeSaved = useCallback(async (item) => {
         try {
             await axios.post(`${import.meta.env.VITE_API_URL}/api/food/save`, { foodId: item._id }, { withCredentials: true })
             setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: Math.max(0, (v.savesCount ?? 1) - 1) } : v))
         } catch {
             // noop
         }
-    }
+    }, [])
 
     return (
-        <ReelFeed
-            items={videos}
-            onSave={removeSaved}
-            emptyMessage="No saved videos yet."
-        />
+        <Suspense fallback={null}>
+            <ReelFeed
+                items={videos}
+                onSave={removeSaved}
+                emptyMessage="No saved videos yet."
+                isLoading={isLoading}
+            />
+        </Suspense>
     )
 }
 

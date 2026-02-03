@@ -41,11 +41,7 @@ const AuthInput = ({
         />
         <label
           htmlFor={id}
- codex/redesign-ui-for-modern-look-j5ky1z
-          className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-500 peer-[&:not(:placeholder-shown)]:top-2 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:-webkit-autofill]:top-2 peer-[&:-webkit-autofill]:text-xs dark:text-slate-400"
-
-          className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:-top-1 peer-focus:text-xs peer-focus:text-indigo-500 dark:text-slate-400"
-main
+          className="pointer-events-none absolute left-11 top-1/2 -translate-y-1/2 text-sm text-slate-500 transition-all duration-200 peer-placeholder-shown:top-1/2 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-xs peer-focus:text-indigo-500 peer-[&:not(:placeholder-shown)]:top-2 peer-[&:not(:placeholder-shown)]:text-xs peer-[&:not(:placeholder-shown)]:text-slate-600 peer-[&:-webkit-autofill]:top-2 peer-[&:-webkit-autofill]:text-xs dark:text-slate-400 dark:peer-[&:not(:placeholder-shown)]:text-slate-300"
         >
           {label}
         </label>
