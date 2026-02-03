@@ -1,5 +1,6 @@
 import React from 'react'
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import UserRegister from '../pages/auth/UserRegister';
 import ChooseRegister from '../pages/auth/ChooseRegister';
 import UserLogin from '../pages/auth/UserLogin';
@@ -11,10 +12,12 @@ import BottomNav from '../components/BottomNav';
 import CreateFood from '../pages/food-partner/createFood';
 import Profile from '../pages/food-partner/Profile';
 
-const AppRoutes = () => {
+const AnimatedRoutes = () => {
+    const location = useLocation();
+
     return (
-        <Router>
-            <Routes>
+        <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
                 <Route path="/register" element={<ChooseRegister />} />
                 <Route path="/user/register" element={<UserRegister />} />
                 <Route path="/user/login" element={<UserLogin />} />
@@ -26,6 +29,14 @@ const AppRoutes = () => {
                 <Route path="/food-partner/:id" element={<Profile />} />
                 <Route path="/home" element={<><Home /><BottomNav /></>} />
             </Routes>
+        </AnimatePresence>
+    );
+};
+
+const AppRoutes = () => {
+    return (
+        <Router>
+            <AnimatedRoutes />
         </Router>
     )
 }
