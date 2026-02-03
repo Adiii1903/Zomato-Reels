@@ -15,7 +15,7 @@ const CreateFood = () => {
   const fileInputRef = useRef(null);
   const navigate = useNavigate();
 
-  /* Preview video */
+  /* Preview selected video */
   useEffect(() => {
     if (!videoFile) {
       setVideoURL('');
