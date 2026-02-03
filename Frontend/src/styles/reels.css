@@ -37,7 +37,7 @@
   background: #000;
 }
 
-/* Placeholder before video loads */
+/* ===== PLACEHOLDER & SKELETON ===== */
 .reel-placeholder {
   position: absolute;
   inset: 0;
@@ -48,7 +48,6 @@
   );
 }
 
-/* Skeleton shimmer */
 .reel-skeleton {
   background: linear-gradient(
     110deg,
@@ -87,6 +86,7 @@
   pointer-events: none;
 }
 
+/* Status (buffering / error) */
 .reel-status {
   position: absolute;
   left: 50%;
@@ -114,7 +114,7 @@
   cursor: pointer;
 }
 
-/* Gradient for readability */
+/* Gradient for text readability */
 .reel-overlay-gradient {
   position: absolute;
   inset: 0;
@@ -188,10 +188,8 @@
   width: 44px;
   height: 44px;
   border-radius: 50%;
-
   display: grid;
   place-items: center;
-
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(10px);
   color: #fff;
@@ -202,7 +200,7 @@
   color: #fff;
 }
 
-/* ===== EMPTY STATE ===== */
+/* ===== EMPTY / LOADING ===== */
 .empty-state {
   position: absolute;
   inset: 0;

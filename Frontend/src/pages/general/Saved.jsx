@@ -5,48 +5,61 @@ import axios from 'axios'
 const ReelFeed = React.lazy(() => import('../../components/ReelFeed'))
 
 const Saved = () => {
-    const [ videos, setVideos ] = useState([])
-    const [ isLoading, setIsLoading ] = useState(true)
+  const [videos, setVideos] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
 
-    useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/food/save`, { withCredentials: true })
-            .then(response => {
-                const savedFoods = response.data.savedFoods.map((item) => ({
-                    _id: item.food._id,
-                    video: item.food.video,
-                    description: item.food.description,
-                    likeCount: item.food.likeCount,
-                    savesCount: item.food.savesCount,
-                    commentsCount: item.food.commentsCount,
-                    foodPartner: item.food.foodPartner,
-                    streamUrl: item.food.streamUrl
-                }))
-                setVideos(savedFoods)
-            })
-            .finally(() => {
-                setIsLoading(false)
-            })
-    }, [])
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_URL}/api/food/save`, {
+        withCredentials: true
+      })
+      .then((response) => {
+        const savedFoods =
+          response.data.savedFoods?.map((item) => ({
+            _id: item.food._id,
+            video: item.food.video,
+            description: item.food.description,
+            likeCount: item.food.likeCount,
+            savesCount: item.food.savesCount,
+            commentsCount: item.food.commentsCount,
+            foodPartner: item.food.foodPartner,
+            streamUrl: item.food.streamUrl
+          })) ?? []
 
-    const removeSaved = useCallback(async (item) => {
-        try {
-            await axios.post(`${import.meta.env.VITE_API_URL}/api/food/save`, { foodId: item._id }, { withCredentials: true })
-            setVideos((prev) => prev.map((v) => v._id === item._id ? { ...v, savesCount: Math.max(0, (v.savesCount ?? 1) - 1) } : v))
-        } catch {
-            // noop
-        }
-    }, [])
+        setVideos(savedFoods)
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
+  }, [])
 
-    return (
-        <Suspense fallback={null}>
-            <ReelFeed
-                items={videos}
-                onSave={removeSaved}
-                emptyMessage="No saved videos yet."
-                isLoading={isLoading}
-            />
-        </Suspense>
-    )
+  /* Remove from saved (optimistic + rollback) */
+  const removeSaved = useCallback(async (item) => {
+    // optimistic: remove from list
+    setVideos((prev) => prev.filter((v) => v._id !== item._id))
+
+    try {
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/food/save`,
+        { foodId: item._id },
+        { withCredentials: true }
+      )
+    } catch {
+      // rollback if API fails
+      setVideos((prev) => [...prev, item])
+    }
+  }, [])
+
+  return (
+    <Suspense fallback={null}>
+      <ReelFeed
+        items={videos}
+        onSave={removeSaved}
+        emptyMessage="No saved videos yet."
+        isLoading={isLoading}
+      />
+    </Suspense>
+  )
 }
 
 export default Saved

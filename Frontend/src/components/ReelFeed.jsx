@@ -33,7 +33,7 @@ const ReelFeed = ({
     }
   }, [items, activeId, indexById])
 
-  /* Observe videos (play/pause) */
+  /* Play / pause based on visibility */
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -63,7 +63,7 @@ const ReelFeed = ({
     return () => observer.disconnect()
   }, [items])
 
-  /* Preload next videos */
+  /* Preload nearby videos */
   useEffect(() => {
     if (!activeId) return
     const index = indexById.get(activeId)
@@ -191,7 +191,10 @@ const ReelFeed = ({
                     {hasError ? (
                       <>
                         <span>Video failed to load.</span>
-                        <button className="reel-retry" onClick={() => retryVideo(item._id)}>
+                        <button
+                          className="reel-retry"
+                          onClick={() => retryVideo(item._id)}
+                        >
                           Retry
                         </button>
                       </>
@@ -230,7 +233,9 @@ const ReelFeed = ({
                     <button className="reel-action">💬</button>
                     <div className="reel-action__count">
                       {item.commentsCount ??
-                        (Array.isArray(item.comments) ? item.comments.length : 0)}
+                        (Array.isArray(item.comments)
+                          ? item.comments.length
+                          : 0)}
                     </div>
                   </div>
                 </div>
