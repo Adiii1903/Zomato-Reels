@@ -58,6 +58,11 @@ const CreateFood = () => {
             return;
         }
 
+        if (!import.meta.env.VITE_API_URL) {
+            setSubmitError('Server configuration is missing. Please try again later.');
+            return;
+        }
+
         const formData = new FormData();
 
         formData.append('name', name);
@@ -75,7 +80,12 @@ const CreateFood = () => {
             navigate("/home"); // Redirect to home or another page after successful creation
         } catch (error) {
             console.error('Unable to save food', error);
-            setSubmitError('Unable to save food. Please try again.');
+            if (error.response?.status === 401) {
+                setSubmitError('Please sign in as a food partner to upload.');
+                window.setTimeout(() => navigate('/food-partner/login'), 800);
+            } else {
+                setSubmitError('Unable to save food. Please try again.');
+            }
         } finally {
             setIsSubmitting(false);
         }
