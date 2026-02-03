@@ -9,6 +9,8 @@ const CreateFood = () => {
     const [ videoFile, setVideoFile ] = useState(null);
     const [ videoURL, setVideoURL ] = useState('');
     const [ fileError, setFileError ] = useState('');
+    const [ submitError, setSubmitError ] = useState('');
+    const [ isSubmitting, setIsSubmitting ] = useState(false);
     const fileInputRef = useRef(null);
 
     const navigate = useNavigate();
@@ -49,24 +51,39 @@ const CreateFood = () => {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setSubmitError('');
+
+        if (!videoFile) {
+            setSubmitError('Please select a video before saving.');
+            return;
+        }
 
         const formData = new FormData();
 
         formData.append('name', name);
         formData.append('description', description);
-        formData.append("mama", videoFile);
+        formData.append("mama", videoFile, videoFile.name);
 
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/food`, formData, {
-            withCredentials: true,
-        })
+        try {
+            setIsSubmitting(true);
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/food`, formData, {
+                withCredentials: true,
+                headers: { 'Content-Type': 'multipart/form-data' }
+            })
 
-        console.log(response.data);
-        navigate("/home"); // Redirect to home or another page after successful creation
+            console.log(response.data);
+            navigate("/home"); // Redirect to home or another page after successful creation
+        } catch (error) {
+            console.error('Unable to save food', error);
+            setSubmitError('Unable to save food. Please try again.');
+        } finally {
+            setIsSubmitting(false);
+        }
         // Optionally reset
         // setName(''); setDescription(''); setVideoFile(null);
     };
 
-    const isDisabled = useMemo(() => !name.trim() || !videoFile, [ name, videoFile ]);
+    const isDisabled = useMemo(() => !name.trim() || !videoFile || fileError || isSubmitting, [ name, videoFile, fileError, isSubmitting ]);
 
     return (
         <div className="create-food-page">
@@ -76,7 +93,7 @@ const CreateFood = () => {
                     <p className="create-food-subtitle">Upload a short video, give it a name, and add a description.</p>
                 </header>
 
-                <form className="create-food-form" onSubmit={onSubmit}>
+                <form className="create-food-form" onSubmit={onSubmit} encType="multipart/form-data">
                     <div className="field-group">
                         <label htmlFor="foodVideo">Food Video</label>
                         <input
@@ -157,9 +174,10 @@ const CreateFood = () => {
 
                     <div className="form-actions">
                         <button className="btn-primary" type="submit" disabled={isDisabled}>
-                            Save Food
+                            {isSubmitting ? 'Saving…' : 'Save Food'}
                         </button>
                     </div>
+                    {submitError && <p className="error-text" role="alert">{submitError}</p>}
                 </form>
             </div>
         </div>
