@@ -7,7 +7,7 @@ import AuthInput from '../../components/auth/AuthInput';
 import AuthButton from '../../components/auth/AuthButton';
 import AuthToast from '../../components/auth/AuthToast';
 import AuthDivider from '../../components/auth/AuthDivider';
-import { EyeIcon, EyeOffIcon, GithubIcon, GoogleIcon, LockIcon, MailIcon } from '../../components/auth/AuthIcons';
+import { EyeIcon, EyeOffIcon, GoogleIcon, LockIcon, MailIcon } from '../../components/auth/AuthIcons';
 
 const UserLogin = () => {
   const navigate = useNavigate();
@@ -18,8 +18,7 @@ const UserLogin = () => {
 
   const socialButtons = useMemo(
     () => [
-      { label: 'Google', icon: GoogleIcon },
-      { label: 'GitHub', icon: GithubIcon }
+      { label: 'Google', icon: GoogleIcon }
     ],
     []
   );
@@ -138,7 +137,7 @@ const UserLogin = () => {
 
         <div className="mt-6 space-y-4">
           <AuthDivider />
-          <div className="grid gap-3 sm:grid-cols-2">
+          <div className="grid gap-3">
             {socialButtons.map(({ label, icon: Icon }) => (
               <AuthButton
                 key={label}
