@@ -15,6 +15,7 @@
 .create-food-card {
   width: 100%;
   max-width: 720px; /* mobile-first but centered card */
+  /* Single source of truth for the card background to avoid merge conflicts */
   background: linear-gradient(180deg, rgba(37, 51, 79, 0.92) 0%, rgba(24, 35, 60, 0.96) 100%);
   border: 1px solid rgba(148, 163, 184, 0.24);
   border-radius: 20px;
