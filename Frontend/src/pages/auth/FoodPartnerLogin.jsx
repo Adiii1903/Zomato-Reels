@@ -29,6 +29,15 @@ const FoodPartnerLogin = () => {
     window.setTimeout(() => setToast(null), 2800);
   };
 
+  const handleSocialLogin = (provider) => {
+    const baseUrl = import.meta.env.VITE_API_URL?.replace(/\/$/, '');
+    if (!baseUrl) {
+      showToast({ type: 'error', message: `Unable to start ${provider} login. Try again later.` });
+      return;
+    }
+    window.location.href = `${baseUrl}/api/auth/${provider}`;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -131,7 +140,12 @@ const FoodPartnerLogin = () => {
           <AuthDivider />
           <div className="grid gap-3 sm:grid-cols-2">
             {socialButtons.map(({ label, icon: Icon }) => (
-              <AuthButton key={label} type="button" variant="secondary">
+              <AuthButton
+                key={label}
+                type="button"
+                variant="secondary"
+                onClick={() => handleSocialLogin(label.toLowerCase())}
+              >
                 <Icon className="h-5 w-5" />
                 {label}
               </AuthButton>
