@@ -22,6 +22,10 @@ router.get("/",
     authMiddleware.authUserMiddleware,
     foodController.getFoodItems)
 
+router.get('/stream/:id',
+    authMiddleware.authUserMiddleware,
+    foodController.streamFoodVideo)
+
 
 router.post('/like',
     authMiddleware.authUserMiddleware,
