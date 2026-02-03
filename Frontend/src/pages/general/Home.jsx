@@ -10,6 +10,10 @@ const Home = () => {
   const [cursor, setCursor] = useState(null)
   const [hasMore, setHasMore] = useState(true)
 
+  const [likedIds, setLikedIds] = useState(() => new Set())
+  const [savedIds, setSavedIds] = useState(() => new Set())
+
+  /* Fetch videos (cursor-based pagination) */
   const fetchVideos = useCallback(
     async (options = {}) => {
       if (options.append && (!hasMore || isLoading)) return
@@ -35,7 +39,7 @@ const Home = () => {
         setCursor(response.data.nextCursor)
         setHasMore(Boolean(response.data.nextCursor))
       } catch {
-        // optional: show toast / error UI
+        // optional: toast / error UI
       } finally {
         setIsLoading(false)
       }
@@ -47,110 +51,55 @@ const Home = () => {
     fetchVideos()
   }, [fetchVideos])
 
-  /* LIKE (optimistic + rollback) */
-  const likeVideo = useCallback(async (item) => {
-    // optimistic update
-    setVideos((prev) =>
-      prev.map((v) =>
-        v._id === item._id
-          ? { ...v, likeCount: (v.likeCount ?? 0) + 1 }
-          : v
-      )
-    )
+  /* LIKE (toggle + optimistic + rollback) */
+  const likeVideo = useCallback(
+    async (item) => {
+      const wasLiked = likedIds.has(item._id)
+      const delta = wasLiked ? -1 : 1
 
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/food/like`,
-        { foodId: item._id },
-        { withCredentials: true }
+      setLikedIds((prev) => {
+        const next = new Set(prev)
+        wasLiked ? next.delete(item._id) : next.add(item._id)
+        return next
+      })
+
+      setVideos((prev) =>
+        prev.map((v) =>
+          v._id === item._id
+            ? { ...v, likeCount: Math.max(0, (v.likeCount ?? 0) + delta) }
+            : v
+        )
       )
 
-      // server says "unliked" → rollback
-      if (!response.data.like) {
+      try {
+        const response = await axios.post(
+          `${import.meta.env.VITE_API_URL}/api/food/like`,
+          { foodId: item._id },
+          { withCredentials: true }
+        )
+
+        if (Boolean(response.data.like) === wasLiked) {
+          throw new Error('rollback')
+        }
+      } catch {
+        // rollback
+        setLikedIds((prev) => {
+          const next = new Set(prev)
+          wasLiked ? next.add(item._id) : next.delete(item._id)
+          return next
+        })
+
         setVideos((prev) =>
           prev.map((v) =>
             v._id === item._id
               ? {
                   ...v,
-                  likeCount: Math.max(0, (v.likeCount ?? 1) - 1)
+                  likeCount: Math.max(0, (v.likeCount ?? 0) - delta)
                 }
               : v
           )
         )
       }
-    } catch {
-      // rollback on error
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id
-            ? {
-                ...v,
-                likeCount: Math.max(0, (v.likeCount ?? 1) - 1)
-              }
-            : v
-        )
-      )
-    }
-  }, [])
-
-  /* SAVE (optimistic + rollback) */
-  const saveVideo = useCallback(async (item) => {
-    // optimistic update
-    setVideos((prev) =>
-      prev.map((v) =>
-        v._id === item._id
-          ? { ...v, savesCount: (v.savesCount ?? 0) + 1 }
-          : v
-      )
-    )
-
-    try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/food/save`,
-        { foodId: item._id },
-        { withCredentials: true }
-      )
-
-      // server says "unsaved" → rollback
-      if (!response.data.save) {
-        setVideos((prev) =>
-          prev.map((v) =>
-            v._id === item._id
-              ? {
-                  ...v,
-                  savesCount: Math.max(0, (v.savesCount ?? 1) - 1)
-                }
-              : v
-          )
-        )
-      }
-    } catch {
-      // rollback on error
-      setVideos((prev) =>
-        prev.map((v) =>
-          v._id === item._id
-            ? {
-                ...v,
-                savesCount: Math.max(0, (v.savesCount ?? 1) - 1)
-              }
-            : v
-        )
-      )
-    }
-  }, [])
-
-  return (
-    <Suspense fallback={null}>
-      <ReelFeed
-        items={videos}
-        onLike={likeVideo}
-        onSave={saveVideo}
-        emptyMessage="No videos available."
-        isLoading={isLoading}
-        onEndReached={() => fetchVideos({ append: true })}
-      />
-    </Suspense>
+    },
+    [likedIds]
   )
-}
-
-export default Home

@@ -1,6 +1,6 @@
 @import './theme.css';
 
-/* Container */
+/* ===== PAGE ===== */
 .create-food-page {
   min-height: 100dvh;
   display: flex;
@@ -13,6 +13,7 @@
     var(--color-bg);
 }
 
+/* ===== CARD ===== */
 .create-food-card {
   width: 100%;
   max-width: 720px;
@@ -30,7 +31,7 @@
   gap: var(--space-5);
 }
 
-/* Header */
+/* ===== HEADER ===== */
 .create-food-header {
   display: grid;
   gap: var(--space-2);
@@ -47,16 +48,10 @@
   max-width: 34rem;
 }
 
-/* Form */
+/* ===== FORM ===== */
 .create-food-form {
   display: grid;
   gap: var(--space-5);
-}
-
-@media (min-width: 960px) {
-  .create-food-form {
-    gap: var(--space-6);
-  }
 }
 
 .field-group {
@@ -72,22 +67,15 @@
   color: var(--color-text-secondary);
 }
 
-/* Inputs */
-.field-group input[type="text"],
-.field-group input[type="file"],
+/* ===== INPUTS ===== */
+.field-group input,
 .field-group textarea {
   appearance: none;
   border: 1px solid var(--color-border);
   background: var(--color-surface-alt);
   padding: 10px 12px;
-  font: inherit;
   border-radius: var(--radius-sm);
-  outline: none;
   color: var(--color-text);
-  transition:
-    border-color var(--transition-base),
-    background var(--transition-base),
-    box-shadow var(--transition-base);
 }
 
 .field-group textarea {
@@ -102,7 +90,7 @@
   background: var(--color-surface);
 }
 
-/* File input */
+/* ===== FILE INPUT ===== */
 .file-input-hidden {
   position: absolute;
   width: 1px;
@@ -111,7 +99,7 @@
   clip: rect(0 0 0 0);
 }
 
-/* Dropzone */
+/* ===== DROPZONE ===== */
 .file-dropzone {
   border: 1.5px dashed color-mix(in srgb, var(--color-border) 80%, transparent);
   background: color-mix(in srgb, var(--color-surface-alt) 55%, transparent);
@@ -147,13 +135,14 @@
   font-size: 0.8rem;
 }
 
+/* ===== ERRORS ===== */
 .error-text {
   color: var(--color-danger);
   font-size: 0.85rem;
   margin-top: var(--space-2);
 }
 
-/* File chip */
+/* ===== FILE CHIP ===== */
 .file-chip {
   margin-top: var(--space-3);
   display: flex;
@@ -178,7 +167,7 @@
   margin-left: auto;
 }
 
-/* Video preview */
+/* ===== VIDEO PREVIEW ===== */
 .video-preview {
   width: 100%;
   max-height: 320px;
@@ -195,9 +184,10 @@
   height: 100%;
   max-height: 320px;
   object-fit: contain;
+  background: #000;
 }
 
-/* Actions */
+/* ===== ACTIONS ===== */
 .form-actions {
   display: flex;
 }

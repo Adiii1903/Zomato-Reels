@@ -35,7 +35,7 @@ const Saved = () => {
 
   /* Remove from saved (optimistic + rollback) */
   const removeSaved = useCallback(async (item) => {
-    // optimistic: remove from list
+    // optimistic: remove immediately
     setVideos((prev) => prev.filter((v) => v._id !== item._id))
 
     try {

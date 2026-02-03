@@ -1,112 +1,111 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react';
-import axios from 'axios';
-import '../../styles/create-food.css';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import axios from 'axios'
+import '../../styles/create-food.css'
+import { useNavigate } from 'react-router-dom'
 
 const CreateFood = () => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [videoFile, setVideoFile] = useState(null);
-  const [videoURL, setVideoURL] = useState('');
-  const [fileError, setFileError] = useState('');
-  const [formError, setFormError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [videoFile, setVideoFile] = useState(null)
+  const [videoURL, setVideoURL] = useState('')
+  const [fileError, setFileError] = useState('')
+  const [formError, setFormError] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const fileInputRef = useRef(null);
-  const navigate = useNavigate();
+  const fileInputRef = useRef(null)
+  const navigate = useNavigate()
 
   /* Preview selected video */
   useEffect(() => {
     if (!videoFile) {
-      setVideoURL('');
-      return;
+      setVideoURL('')
+      return
     }
-    const url = URL.createObjectURL(videoFile);
-    setVideoURL(url);
-    return () => URL.revokeObjectURL(url);
-  }, [videoFile]);
+    const url = URL.createObjectURL(videoFile)
+    setVideoURL(url)
+    return () => URL.revokeObjectURL(url)
+  }, [videoFile])
 
   const onFileChange = (e) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (!file) {
-      setVideoFile(null);
-      setFileError('');
-      return;
+      setVideoFile(null)
+      setFileError('')
+      return
     }
     if (!file.type.startsWith('video/')) {
-      setFileError('Please select a valid video file.');
-      return;
+      setFileError('Please select a valid video file.')
+      return
     }
-    setFileError('');
-    setVideoFile(file);
-  };
+    setFileError('')
+    setVideoFile(file)
+  }
 
   const onDrop = (e) => {
-    e.preventDefault();
-    const file = e.dataTransfer?.files?.[0];
-    if (!file) return;
+    e.preventDefault()
+    const file = e.dataTransfer?.files?.[0]
+    if (!file) return
 
     if (!file.type.startsWith('video/')) {
-      setFileError('Please drop a valid video file.');
-      return;
+      setFileError('Please drop a valid video file.')
+      return
     }
-    setFileError('');
-    setVideoFile(file);
-  };
+    setFileError('')
+    setVideoFile(file)
+  }
 
-  const onDragOver = (e) => e.preventDefault();
-  const openFileDialog = () => fileInputRef.current?.click();
+  const onDragOver = (e) => e.preventDefault()
+  const openFileDialog = () => fileInputRef.current?.click()
 
   const onSubmit = async (e) => {
-    e.preventDefault();
-    setFormError('');
+    e.preventDefault()
+    setFormError('')
 
     if (!videoFile) {
-      setFormError('Please select a video before saving.');
-      return;
+      setFormError('Please select a video before saving.')
+      return
     }
 
     if (!name.trim()) {
-      setFormError('Please add a name for the food item.');
-      return;
+      setFormError('Please add a name for the food item.')
+      return
     }
 
     if (!import.meta.env.VITE_API_URL) {
-      setFormError('Server configuration is missing. Please try again later.');
-      return;
+      setFormError('Server configuration is missing. Please try again later.')
+      return
     }
 
-    const formData = new FormData();
-    formData.append('name', name);
-    formData.append('description', description);
-    formData.append('mama', videoFile);
+    const formData = new FormData()
+    formData.append('name', name)
+    formData.append('description', description)
+    formData.append('mama', videoFile)
 
     try {
-      setIsSubmitting(true);
+      setIsSubmitting(true)
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/food`,
         formData,
         { withCredentials: true }
-      );
-
-      navigate('/home');
+      )
+      navigate('/home')
     } catch (error) {
-      console.error('Failed to save food', error);
+      console.error('Failed to save food', error)
       if (error.response?.status === 401) {
-        setFormError('Please sign in as a food partner to upload.');
-        setTimeout(() => navigate('/food-partner/login'), 800);
+        setFormError('Please sign in as a food partner to upload.')
+        setTimeout(() => navigate('/food-partner/login'), 800)
       } else {
-        setFormError('Unable to save food right now. Please try again.');
+        setFormError('Unable to save food right now. Please try again.')
       }
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   const isDisabled = useMemo(
     () => !name.trim() || !videoFile || fileError || isSubmitting,
     [name, videoFile, fileError, isSubmitting]
-  );
+  )
 
   return (
     <div className="create-food-page">
@@ -118,7 +117,7 @@ const CreateFood = () => {
           </p>
         </header>
 
-        <form className="create-food-form" onSubmit={onSubmit} encType="multipart/form-data">
+        <form className="create-food-form" onSubmit={onSubmit}>
           <div className="field-group">
             <label htmlFor="foodVideo">Food Video</label>
             <input
@@ -137,8 +136,8 @@ const CreateFood = () => {
               onClick={openFileDialog}
               onKeyDown={(e) => {
                 if (e.key === 'Enter' || e.key === ' ') {
-                  e.preventDefault();
-                  openFileDialog();
+                  e.preventDefault()
+                  openFileDialog()
                 }
               }}
               onDrop={onDrop}
@@ -166,8 +165,8 @@ const CreateFood = () => {
                     type="button"
                     className="btn-ghost danger"
                     onClick={() => {
-                      setVideoFile(null);
-                      setFileError('');
+                      setVideoFile(null)
+                      setFileError('')
                     }}
                   >
                     Remove
@@ -194,7 +193,6 @@ const CreateFood = () => {
             <input
               id="foodName"
               type="text"
-              placeholder="e.g., Spicy Paneer Wrap"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
@@ -206,7 +204,6 @@ const CreateFood = () => {
             <textarea
               id="foodDesc"
               rows={4}
-              placeholder="Write a short description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
@@ -222,7 +219,7 @@ const CreateFood = () => {
         </form>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CreateFood;
+export default CreateFood

@@ -1,4 +1,11 @@
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, {
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react'
 import { Link } from 'react-router-dom'
 
 const ReelFeed = ({
@@ -23,9 +30,9 @@ const ReelFeed = ({
     [items]
   )
 
-  /* Initial load */
+  /* Initial preload */
   useEffect(() => {
-    if (items.length === 0) return
+    if (!items.length) return
     if (!activeId || !indexById.has(activeId)) {
       const initialIds = items.slice(0, 3).map((i) => i._id)
       setActiveId(items[0]._id)
@@ -143,7 +150,7 @@ const ReelFeed = ({
 
   return (
     <div className="reels-page">
-      <div className="reels-feed" role="list" ref={feedRef}>
+      <div className="reels-feed" ref={feedRef} role="list">
         {isLoading && items.length === 0 && (
           <div className="reel-skeleton-list" aria-hidden>
             {Array.from({ length: 3 }).map((_, i) => (
@@ -171,7 +178,7 @@ const ReelFeed = ({
                 ref={setVideoRef(item._id)}
                 className="reel-video"
                 data-id={item._id}
-                src={shouldLoad ? (item.streamUrl || item.video) : undefined}
+                src={shouldLoad ? item.streamUrl || item.video : undefined}
                 poster={item.poster}
                 muted
                 playsInline
